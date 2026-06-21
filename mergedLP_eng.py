@@ -6,7 +6,7 @@ from io import BytesIO
 
 # --- 1. CONFIGURATION ---
 st.set_page_config(page_title="Advanced Lesson Planner", layout="wide")
-st.title("🎓 PTES Universal & PEDATI Lesson Planner")
+st.title("🎓 Merged Lesson Planner Integration")
 
 # --- MAIN PAGE API KEY ENTRY (ABOVE TOPIC) ---
 user_api_key = st.text_input(
@@ -246,7 +246,7 @@ with c1: u_topic = st.text_input("Lesson Topic:")
 with c2: u_syllabus = st.text_input("Syllabus Code:")
 u_extra = st.text_area("Extra Context (Optional):")
 
-if st.button("🚀 GENERATE COMPLETE LESSON PLAN"):
+if st.button("🚀 GENERATE MERGED LESSON PLAN"):
     if not user_api_key:
         st.error("❌ Please input your Google Gemini API key at the top before clicking generate.")
     elif not u_topic or not u_syllabus:
@@ -261,7 +261,7 @@ if 'adv_plan_out_en' in st.session_state:
     st.subheader("AI Draft Preview")
     st.text_area("Content", st.session_state['adv_plan_out_en'], height=400)
     doc_file = create_word_export(u_topic, u_syllabus, st.session_state['adv_plan_out_en'])
-    st.download_button("📥 Download to Word version (.docx)", doc_file, f"Universal_LP_{u_topic}.docx")
+    st.download_button("📥 Download to Word version (.docx)", doc_file, f"Merged_LP_{u_topic}.docx")
 
 st.markdown("---")
 st.caption("Lesson planner 3.0 | Developer: Hjh Nurul Haziqah Hj Nordin | © 2026 Brunei's Education Innovation")
