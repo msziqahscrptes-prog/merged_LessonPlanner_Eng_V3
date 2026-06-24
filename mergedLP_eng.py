@@ -295,4 +295,4 @@ if 'pedati_plan_out_en' in st.session_state:
     )
 
 st.markdown("---")
-st.caption("PEDATI LESSON PLANNER 3.0 | DEVELOPER: HJH NURUL HAZIQAH HJ NORDIN | © 2026 BRUNEI'S EDUCATION INNOVATION")
+st.caption("PEDATI LESSON PLANNER 3.0 | DEVELOPER: HJH NURUL HAZIQAH HJ NORDIN | © 2026 BSC.HON(M) COMPUTER SCIENCE, University Of Strathclyde")
