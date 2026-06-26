@@ -5,8 +5,8 @@ from docx.shared import Pt, Inches
 from io import BytesIO
 
 # --- 1. CONFIGURATION ---
-st.set_page_config(page_title="PEDATI Master Planner", layout="wide")
-st.title("🎓 PEDATI SMART LESSON PLANNER")
+st.set_page_config(page_title="MERGED Master Planner", layout="wide")
+st.title("🎓 MERGED SMART LESSON PLANNER")
 
 # --- MAIN PAGE CONFIGURATION & USER API KEY BAR (AT THE VERY TOP) ---
 user_api_key = st.text_input(
@@ -267,7 +267,7 @@ u_topic = st.text_input("LESSON TOPIC:")
 u_syllabus = st.text_input("SYLLABUS CODE:")
 u_extra = st.text_area("SPECIFIC CONTEXT / KEYWORDS (OPTIONAL):")
 
-if st.button("🚀 GENERATE PEDATI LESSON PLAN", type="primary"):
+if st.button("🚀 GENERATE MERGED MASTER LESSON PLAN", type="primary"):
     if not user_api_key:
         st.error("❌ KEY CONFIGURATION ERROR! PLEASE INPUT YOUR GOOGLE GEMINI API KEY AT THE TOP OF THE PAGE FIRST.")
     elif not u_topic or not u_syllabus:
@@ -295,7 +295,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style='text-align: center; color: grey; font-size: 0.8em;'>
-        <p><b>SMART PEDATI LESSON PLAN AI-GENERATOR V1.0</b></p>
+        <p><b>SMART MERGED LESSON PLAN AI-GENERATOR V1.0</b></p>
         <p>DEVELOPED & CONCEPTUALIZED BY: <b>[HAJAH NURUL HAZIQAH @ HJH HARTINI HJ NORDIN]</b></p>
         <p>© 2026 BSC(HONORS) IN COMPUTER SCIENCE, UNIVERSITY OF STRATHCLYDE</p>
     </div>
