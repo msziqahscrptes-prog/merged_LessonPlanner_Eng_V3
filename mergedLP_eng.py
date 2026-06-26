@@ -6,7 +6,7 @@ from io import BytesIO
 
 # --- 1. CONFIGURATION ---
 st.set_page_config(page_title="MERGED Master Planner", layout="wide")
-st.title("🎓 MERGED SMART LESSON PLANNER")
+st.title("🎓 PEDATI SMART LESSON PLANNER")
 
 # --- MAIN PAGE CONFIGURATION & USER API KEY BAR (AT THE VERY TOP) ---
 user_api_key = st.text_input(
@@ -108,7 +108,7 @@ def generate_pedati_plan(topic, syllabus, extra_context, api_key, model_name):
         return f"SYSTEM ERROR: {str(e)}"
 
 
-# --- 3. WORD DOCUMENT EXPORT ENGINE (REPAIRED WITH ACCUMULATOR AND FIXED VARIABLES) ---
+# --- 3. WORD DOCUMENT EXPORT ENGINE ---
 def create_word_export(topic, syllabus, text):
     doc = Document()
     
@@ -116,7 +116,7 @@ def create_word_export(topic, syllabus, text):
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Arial'
-    font.size = Pt(14)  # Set 14 points font size
+    font.size = Pt(12)  # Set 14 points font size
     
     p_format = style.paragraph_format
     p_format.line_spacing = 1.0  # Set 1 paragraph / single spacing
@@ -126,7 +126,7 @@ def create_word_export(topic, syllabus, text):
     title_p = doc.add_paragraph()
     run_title = title_p.add_run(f'LESSON PLAN: {topic.upper()} ({syllabus.upper()})')
     run_title.bold = True
-    run_title.font.size = Pt(18)
+    run_title.font.size = Pt(16)
 
     # 1. Admin Header Table (6-field layout)
     admin_table = doc.add_table(rows=3, cols=4)
@@ -229,11 +229,9 @@ def create_word_export(topic, syllabus, text):
             cell_p = table.cell(0, 0).paragraphs[0]
             cell_p.paragraph_format.line_spacing = 1.0
             
-            # FIXED: content_lines assignment explicitly set here to prevent NameError
-            content_lines = lines[1:]
-            
-            cleaned_body = "\n".join([l.strip() for l in content_lines if l.strip()]).replace("**", "")
-            cell_p.add_run(cleaned_body)
+            # REPAIRED: Reads body content directly without splitting lines to avoid text dropping
+            cleaned_body = body_content.strip().replace("**", "")
+            cell_p.add_run(cleaned_body if cleaned_body else "No content generated.")
             doc.add_paragraph()
 
     # 4. HOD Approval Page
@@ -267,13 +265,13 @@ u_topic = st.text_input("LESSON TOPIC:")
 u_syllabus = st.text_input("SYLLABUS CODE:")
 u_extra = st.text_area("SPECIFIC CONTEXT / KEYWORDS (OPTIONAL):")
 
-if st.button("🚀 GENERATE MERGED MASTER LESSON PLAN", type="primary"):
+if st.button("🚀 GENERATE MASTER LESSON PLAN", type="primary"):
     if not user_api_key:
         st.error("❌ KEY CONFIGURATION ERROR! PLEASE INPUT YOUR GOOGLE GEMINI API KEY AT THE TOP OF THE PAGE FIRST.")
     elif not u_topic or not u_syllabus:
         st.error("❌ PLEASE PROVIDE BOTH A LESSON TOPIC AND A SYLLABUS CODE.")
     else:
-        with st.spinner("AI IS BUILDING YOUR PEDATI PLAN..."):
+        with st.spinner("AI IS BUILDING YOUR MASTER PLAN..."):
             result = generate_pedati_plan(u_topic, u_syllabus, u_extra, user_api_key, selected_model_name)
             st.session_state['pedati_out'] = result
 
@@ -286,7 +284,7 @@ if 'pedati_out' in st.session_state:
     st.download_button(
         label="📥 DOWNLOAD WORD (.DOCX)", 
         data=doc_file, 
-        file_name=f"PEDATI_MASTER_{u_topic.upper().replace(' ', '_')}.docx",
+        file_name=f"LP_Merged_{u_topic.upper().replace(' ', '_')}.docx",
         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
 
@@ -295,7 +293,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style='text-align: center; color: grey; font-size: 0.8em;'>
-        <p><b>SMART MERGED LESSON PLAN AI-GENERATOR V1.0</b></p>
+        <p><b>MERGED SMART LESSON PLAN AI-GENERATOR V1.0</b></p>
         <p>DEVELOPED & CONCEPTUALIZED BY: <b>[HAJAH NURUL HAZIQAH @ HJH HARTINI HJ NORDIN]</b></p>
         <p>© 2026 BSC(HONORS) IN COMPUTER SCIENCE, UNIVERSITY OF STRATHCLYDE</p>
     </div>
