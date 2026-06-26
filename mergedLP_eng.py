@@ -5,8 +5,8 @@ from docx.shared import Pt, Inches
 from io import BytesIO
 
 # --- 1. CONFIGURATION ---
-st.set_page_config(page_title="MERGED MASTER Planner", layout="wide")
-st.title("🎓 MASTER SMART LESSON PLANNER")
+st.set_page_config(page_title="PEDATI Master Planner", layout="wide")
+st.title("🎓 PEDATI SMART LESSON PLANNER")
 
 # --- MAIN PAGE CONFIGURATION & USER API KEY BAR (AT THE VERY TOP) ---
 user_api_key = st.text_input(
@@ -108,7 +108,7 @@ def generate_pedati_plan(topic, syllabus, extra_context, api_key, model_name):
         return f"SYSTEM ERROR: {str(e)}"
 
 
-# --- 3. WORD DOCUMENT EXPORT ENGINE (REPAIRED BLOCK EXTRACTOR) ---
+# --- 3. WORD DOCUMENT EXPORT ENGINE (REPAIRED WITH ACCUMULATOR AND FIXED VARIABLES) ---
 def create_word_export(topic, syllabus, text):
     doc = Document()
     
@@ -116,7 +116,7 @@ def create_word_export(topic, syllabus, text):
     style = doc.styles['Normal']
     font = style.font
     font.name = 'Arial'
-    font.size = Pt(12)  # Set 12 points font size
+    font.size = Pt(14)  # Set 14 points font size
     
     p_format = style.paragraph_format
     p_format.line_spacing = 1.0  # Set 1 paragraph / single spacing
@@ -126,7 +126,7 @@ def create_word_export(topic, syllabus, text):
     title_p = doc.add_paragraph()
     run_title = title_p.add_run(f'LESSON PLAN: {topic.upper()} ({syllabus.upper()})')
     run_title.bold = True
-    run_title.font.size = Pt(16)
+    run_title.font.size = Pt(18)
 
     # 1. Admin Header Table (6-field layout)
     admin_table = doc.add_table(rows=3, cols=4)
@@ -173,7 +173,7 @@ def create_word_export(topic, syllabus, text):
                 
                 heading_title = block_lines[0].strip().upper().replace("**", "")
                 
-                # Smarter extraction tracking markers
+                # State accumulation logic tracking markers
                 lecturer_content = []
                 students_content = []
                 current_target = None
@@ -192,7 +192,7 @@ def create_word_export(topic, syllabus, text):
                     elif current_target == "STUDENTS":
                         students_content.append(cleaned_line)
 
-                # Assemble extracted string data blocks
+                # Assemble extracted text safely
                 lecturer_text = "\n".join([l for l in lecturer_content if l])
                 students_text = "\n".join([l for l in students_content if l])
                 
@@ -228,6 +228,9 @@ def create_word_export(topic, syllabus, text):
             table.style = 'Table Grid'
             cell_p = table.cell(0, 0).paragraphs[0]
             cell_p.paragraph_format.line_spacing = 1.0
+            
+            # FIXED: content_lines assignment explicitly set here to prevent NameError
+            content_lines = lines[1:]
             
             cleaned_body = "\n".join([l.strip() for l in content_lines if l.strip()]).replace("**", "")
             cell_p.add_run(cleaned_body)
@@ -292,7 +295,7 @@ st.markdown("---")
 st.markdown(
     """
     <div style='text-align: center; color: grey; font-size: 0.8em;'>
-        <p><b>SMART MERGED UNIVERSAL & PEDATI LESSON PLAN AI-GENERATOR V1.0</b></p>
+        <p><b>SMART PEDATI LESSON PLAN AI-GENERATOR V1.0</b></p>
         <p>DEVELOPED & CONCEPTUALIZED BY: <b>[HAJAH NURUL HAZIQAH @ HJH HARTINI HJ NORDIN]</b></p>
         <p>© 2026 BSC(HONORS) IN COMPUTER SCIENCE, UNIVERSITY OF STRATHCLYDE</p>
     </div>
